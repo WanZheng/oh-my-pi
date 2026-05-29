@@ -10,6 +10,7 @@ import type { Effort, ImageContent, Model } from "@oh-my-pi/pi-ai";
 import type { BashResult } from "../../exec/bash-executor";
 import type { ContextUsage } from "../../extensibility/extensions/types";
 import type { SessionStats } from "../../session/agent-session";
+import type { ApprovalMode } from "../../tools/approval";
 import type { TodoPhase } from "../../tools/todo-write";
 
 // ============================================================================
@@ -39,6 +40,9 @@ export type RpcCommand =
 	// Thinking
 	| { id?: string; type: "set_thinking_level"; level: ThinkingLevel }
 	| { id?: string; type: "cycle_thinking_level" }
+
+	// Approval
+	| { id?: string; type: "set_approval_mode"; mode: ApprovalMode }
 
 	// Queue modes
 	| { id?: string; type: "set_steering_mode"; mode: "all" | "one-at-a-time" }
@@ -81,6 +85,7 @@ export type RpcCommand =
 export interface RpcSessionState {
 	model?: Model;
 	thinkingLevel: ThinkingLevel | undefined;
+	approvalMode: ApprovalMode;
 	isStreaming: boolean;
 	isCompacting: boolean;
 	steeringMode: "all" | "one-at-a-time";
@@ -156,6 +161,9 @@ export type RpcResponse =
 			success: true;
 			data: { level: Effort } | null;
 	  }
+
+	// Approval
+	| { id?: string; type: "response"; command: "set_approval_mode"; success: true; data: { mode: ApprovalMode } }
 
 	// Queue modes
 	| { id?: string; type: "response"; command: "set_steering_mode"; success: true }

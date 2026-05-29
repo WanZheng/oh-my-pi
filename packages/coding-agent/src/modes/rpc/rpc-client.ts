@@ -11,6 +11,7 @@ import type { ImageContent, Model } from "@oh-my-pi/pi-ai";
 import { isRecord, ptree, readJsonl } from "@oh-my-pi/pi-utils";
 import type { BashResult } from "../../exec/bash-executor";
 import type { SessionStats } from "../../session/agent-session";
+import type { ApprovalMode } from "../../tools/approval";
 import type {
 	RpcCommand,
 	RpcExtensionUIRequest,
@@ -391,6 +392,13 @@ export class RpcClient {
 	 */
 	async setThinkingLevel(level: ThinkingLevel): Promise<void> {
 		await this.#send({ type: "set_thinking_level", level });
+	}
+
+	/**
+	 * Set the tool approval mode for future tool calls.
+	 */
+	async setApprovalMode(mode: ApprovalMode): Promise<void> {
+		await this.#send({ type: "set_approval_mode", mode });
 	}
 
 	/**

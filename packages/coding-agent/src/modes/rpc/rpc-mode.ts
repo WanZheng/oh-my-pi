@@ -509,6 +509,7 @@ export async function runRpcMode(
 				const state: RpcSessionState = {
 					model: session.model,
 					thinkingLevel: session.thinkingLevel,
+					approvalMode: session.settings.get("tools.approvalMode"),
 					isStreaming: session.isStreaming,
 					isCompacting: session.isCompacting,
 					steeringMode: session.steeringMode,
@@ -595,6 +596,15 @@ export async function runRpcMode(
 					return success(id, "cycle_thinking_level", null);
 				}
 				return success(id, "cycle_thinking_level", { level });
+			}
+
+			// =================================================================
+			// Approval
+			// =================================================================
+
+			case "set_approval_mode": {
+				session.settings.override("tools.approvalMode", command.mode);
+				return success(id, "set_approval_mode", { mode: command.mode });
 			}
 
 			// =================================================================
@@ -785,7 +795,7 @@ export async function runRpcMode(
 
 			default: {
 				const unknownCommand = command as { type: string };
-				return error(undefined, unknownCommand.type, `Unknown command: ${unknownCommand.type}`);
+				return error(id, unknownCommand.type, `Unknown command: ${unknownCommand.type}`);
 			}
 		}
 	};

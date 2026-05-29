@@ -24,6 +24,18 @@ Configure with `tools.approvalMode`:
 
 `--auto-approve` and `--yolo` force `tools.approvalMode: yolo` for the session.
 
+RPC embeddings can update the mode for future tool calls without restarting the agent:
+
+```json
+{ "id": "1", "type": "set_approval_mode", "mode": "write" }
+```
+
+The response echoes the active mode:
+
+```json
+{ "id": "1", "type": "response", "command": "set_approval_mode", "success": true, "data": { "mode": "write" } }
+```
+
 ## User overrides
 
 `tools.approval` is honored in every mode:
